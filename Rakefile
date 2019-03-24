@@ -1,12 +1,15 @@
 require_relative 'config/environment.rb'
+require "pry"
 
 namespace :db do
 
   desc "Migrate the db"
   task :migrate do
-    connection_details = YAML::load(File.open('config/database.yml'))
-    ActiveRecord::Base.establish_connection(connection_details)
-    ActiveRecord::Migration.migrate("db/migrate/")
+    # connection_details = YAML::load(File.open('config/database.yml'))
+    # ActiveRecord::Base.establish_connection(connection_details)
+    # ActiveRecord::Migration.migrate("db/migrate/")
+    ActiveRecord::Migration.verbose = ENV["VERBOSE"] ? ENV["VERBOSE"] == "true" : true
+    ActiveRecord::Migrator.migrate(:up)
   end
 
   desc "drop and recreate the db"
